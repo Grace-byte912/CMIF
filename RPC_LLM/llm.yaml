@@ -1,0 +1,31 @@
+includes:
+  - base.yaml
+targets:
+  - target: /bin
+    createlinks:
+      - src: /opt/python-occlum/bin/python3
+        linkname: python3
+  # python packages
+  - target: /opt
+    copy:
+      - dirs:
+          - ../python-occlum
+  # python code
+  - target: /
+    copy:
+      - dirs:
+          - ../llama
+  - target: /opt/occlum/glibc/lib
+    copy:
+      - files:
+          - /opt/occlum/glibc/lib/libnss_files.so.2
+          - /opt/occlum/glibc/lib/libnss_dns.so.2
+          - /opt/occlum/glibc/lib/libresolv.so.2
+  - target: /opt/occlum/toolchains/gcc/x86_64-linux-musl/lib/
+    copy:
+      - files:
+          - /opt/occlum/toolchains/gcc/x86_64-linux-musl/lib/libgcc_s.so.1
+            # - target: /proc/sys/kernel/random/
+            # copy:
+            # - files:
+            #- /proc/sys/kernel/random/boot_id
