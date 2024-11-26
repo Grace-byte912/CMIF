@@ -103,7 +103,8 @@ class BertClassifier:
         return private_tokens
 
     def train(self, train_texts, train_labels):
-        train_encodings = self.tokenizer(train_texts, max_length=128, truncation=True, padding=True, return_tensors=None)
+        train_encodings = self.tokenizer(train_texts, max_length=128, truncation=True, padding=True,
+                                         return_tensors=None)
         pdb.set_trace()
         input_ids = self.report_private_tokens(train_encodings['input_ids'])
         train_dataset = TensorDataset(
@@ -194,22 +195,14 @@ def parse_qnli_json_data(data_file):
 
 
 if __name__ == "__main__":
-    # 使用示例
-    # train_file = '/home/yuhonglan/Datasets/SST-2/train.jsonl'
-    # test_file = '/home/yuhonglan/Datasets/SST-2/test.jsonl'
-
-    train_file = '/home/yuhonglan/Datasets/QNLI/train.jsonl'
-    test_file = '/home/yuhonglan/Datasets/QNLI/test.jsonl'
+    train_file = '/Datasets/QNLI/train.jsonl'
+    test_file = '/Datasets/QNLI/test.jsonl'
     # from modelscope.msdatasets import MsDataset
-    #
-    # # Load the cola dataset
-    # train_datasets = MsDataset.load('modelscope/glue', subset_name='qnli', split='train')
-    # eval_datasets =  MsDataset.load('modelscope/glue', subset_name='qnli', split='test')
 
     train_texts, train_labels = parse_qnli_json_data(train_file)
     test_texts, test_labels = parse_qnli_json_data(test_file)
 
-    classifier = BertClassifier("/home/yuhonglan/Models/bert-base-uncased", num_labels=2,
+    classifier = BertClassifier("/Models/bert-base-uncased", num_labels=2,
                                 device=torch.device('cuda:0'))
     # classifier.count_and_save_low_freq_words(train_file)
 

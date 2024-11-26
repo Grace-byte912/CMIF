@@ -206,16 +206,7 @@ def get_nearest_tokens(model, vocab=[], batch_size=4000, top_k=30):
         normalized_similarities = (similarities - similarities_min) / (similarities_max - similarities_min)
         # 对于batch内的每个token,找到最近的top_k个token
         nearest_indices = torch.argsort(normalized_similarities, dim=1, descending=True)[:, :top_k + 1]
-        # 将距离转换为负值
-        # negative_distances = -distances
-        # 对负距离应用softmax函数进行归一化
-        # normalized_distances = torch.softmax(negative_distances, dim=1)
-        # 对每个batch内的距离进行Min-Max归一化
-        # min_val, _ = torch.min(negative_distances, dim=1, keepdim=True)
-        # max_val, _ = torch.max(negative_distances, dim=1, keepdim=True)
-        # normalized_distances = (negative_distances - min_val) / (max_val - min_val)
-        # 对于batch内的每个token，找到最近的top_k个token
-        # nearest_indices = torch.argsort(normalized_distances, dim=1, descending=True)[:, :top_k]
+
         for j in range(len(batch_embeddings)):
             token = vocab[i + j]
             if token not in nearest_tokens:
@@ -268,22 +259,6 @@ def cal_sensitivity_llama_embedding(model):
     l2_sensitivity = max_distance
     return l2_sensitivity
 
-
-# def cal_sensitivity_llama_embedding(model):
-#     embedding_matrix = model.model.embed_tokens.weight.data.numpy()
-#     l1_sensitivity = 0
-#     distance = cdist(embedding_matrix, embedding_matrix, "cityblock")
-#     l1_sensitivity = np.max(distance)
-#
-#     # l2-sensitivity
-#     distance = cdist(embedding_matrix, embedding_matrix, "euclidean")
-#     l2_sensitivity = np.max(distance)
-#
-#     return l1_sensitivity, l2_sensitivity
-
-
-# 函数根据输入的隐私预算（privacy budget）参数 epsilon（eps）和 delta（delta），以及其他相关参数，
-# 通过二分搜索的方式找到合适的噪声乘数（noise_factor）。
 def get_noise_multiplier(eps, delta, batch_size=8, dataset_size=50000, epoch=3, local_dp=False, noise_type='aGM'):
     # 如果是本地差分隐私
     if local_dp:

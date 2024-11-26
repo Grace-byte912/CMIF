@@ -27,7 +27,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 import torch
 import matplotlib.pyplot as plt
 import seaborn as sns
-from picture import show_logits
 from rouge import Rouge
 from datasets import load_metric
 from sklearn.manifold import TSNE
@@ -66,11 +65,6 @@ def compute_metrics(predictions, labels, tokenizer):
     # pdb.set_trace()
     decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
-    # Rouge expects a newline after each sentence
-    # 对解码后的预测结果进行句子划分,并在每个句子之间插入换行符。这是因为 ROUGE 指标的计算需要按句子分隔。
-    # decoded_preds = ["\n".join(nltk.sent_tokenize(pred.strip())) for pred in decoded_preds]
-    # decoded_labels = ["\n".join(nltk.sent_tokenize(label.strip())) for label in decoded_labels]
-    # pdb.set_trace()
     result = metric.compute(predictions=decoded_preds, references=decoded_labels, use_stemmer=True)
     # Extract a few results
     result = {key: value.mid.fmeasure * 100 for key, value in result.items()}
@@ -280,10 +274,6 @@ class Trainer:
                                           prompt_masks=prompt_mask)
                 noise_logits = noise_output["logits"]
 
-                # DpConfig.emb_add_noise = False
-                # clean_output = self.model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
-                # clean_logits = clean_output["logits"]
-                # show_logits(noise_logits, clean_logits, labels)
                 cost_em = self.model.base_model.model.lm_head.weight.to(noise_logits.device)
 
                 loss = EMOLoss(noise_logits, labels, cost_em.float())

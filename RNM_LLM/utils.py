@@ -141,12 +141,6 @@ def add_gauss_noise_adaptive(embeddings, noise_factor, mean=0, std=1, prompt_mas
     noise_factors = (distances - distances.min(dim=-1, keepdim=True)[0]) / \
                     (distances.max(dim=-1, keepdim=True)[0] - distances.min(dim=-1, keepdim=True)[0])
 
-    # 计算每个token与对应序列的prompt中心的余弦相似度
-    # prompt_centers_norm = prompt_centers / torch.norm(prompt_centers, dim=-1, keepdim=True)
-    # embeddings_norm = embeddings / torch.norm(embeddings, dim=-1, keepdim=True)
-    # cosine_similarities = torch.matmul(embeddings_norm, prompt_centers_norm.unsqueeze(1).transpose(1, 2)).squeeze(-1)
-    # # 将余弦相似度转换为距离
-    # noise_factors = 1 - cosine_similarities
 
     noise_factors_expanded = noise_factors.unsqueeze(-1).expand(batch, seq, hidden).to(dtype=embeddings.dtype)
     noise_factors_expanded = torch.where(prompt_masks == 1, noise_factors_expanded, 0)

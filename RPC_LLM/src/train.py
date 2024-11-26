@@ -23,8 +23,8 @@ from peft import get_peft_model, LoraConfig, TaskType, PromptTuningConfig, Promp
 
 @dataclass
 class FinetuneArguments:
-    dataset_path: str = field(default="/home/yuhonglan/llm/Finetune_LLAMA/Data_sample/UMLSE_Train_Tokenized")
-    model_path: str = field(default="/home/yuhonglan/Models/Llama-2-7b-chat-hf")
+    dataset_path: str = field(default="../../llm/Finetune_LLAMA/Data_sample/UMLSE_Train_Tokenized")
+    model_path: str = field(default="../../Models/Llama-2-7b-chat-hf")
 
 
 @dataclass

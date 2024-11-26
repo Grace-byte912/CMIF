@@ -46,7 +46,7 @@ def inference(model, tokenizer):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="")
-    parser.add_argument('--model-path', type=str, default="/home/yuhonglan/Models/Llama-2-7b-chat-hf",
+    parser.add_argument('--model-path', type=str, default="../../Models/Llama-2-7b-chat-hf",
                         help='The repo for the Llama2')
     parser.add_argument('--n-predict', type=int, default=128, help='Max tokens to predict')
     parser.add_argument("--gpu", action='store_true', default=False, help="whether to use gpu to accelerate")
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         # for name, param in model.named_parameters():
         #     print(f"Parameter: {name}, Shape: {param.shape}, Type: {param.device.type} , Para: {param}\n")
 
-        remote_model_path = "/home/yuhonglan/Models/Llama-2-7b-chat-hf"
+        remote_model_path = "../../Models/Llama-2-7b-chat-hf"
         model.init_decoders(remote_model_path)
         # Load tokenizer
         tokenizer = LlamaTokenizer.from_pretrained(args.model_path)
